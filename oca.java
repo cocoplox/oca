@@ -5,7 +5,6 @@ public class oca{
     public static int CASILLA_FINAL = 63;
     public static void main(String[] args){
         Scanner input = new Scanner(System.in);
-        int prueba = 10;
         //Aqui van a ir todas las variables
         Random numeroRandom = new Random();
         boolean numeroValido = false;
