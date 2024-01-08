@@ -12,6 +12,7 @@ public class oca{
         int dado;
         int[] casillasEspeciales = {1,5,9,14,18,23,27,32,36,41,45,50,54,59,63,6,12,31,26,53,42,52,58};
         int[] casillasOca = {1,5,9,14,18,23,27,32,36,41,45,50,54,59,63};
+        int[] casillasPuente = {6,12};
 
         System.out.println("Vamos a jugar al juego de la oca");
         System.out.println("Introduce el numero de jugadores (1-4)");
@@ -46,6 +47,7 @@ public class oca{
 
                 dado = numeroRandom.nextInt(6)+1;
                 jugadores[i] += dado;
+                System.out.println("El dado ha caido en " + dado);
                 System.out.println("el jugador " + (i+1) + " se ha desplazado a la casilla: " + jugadores[i]);
                 // Metodo casilla especial
                 if (esCasillaEspecial(jugadores[i], casillasEspeciales)){
@@ -58,10 +60,26 @@ public class oca{
                         jugadores[i] = nuevaPosicion;
                         System.out.println("Te has desplazado a la casilla: " + jugadores[i]);
                         System.out.println("Vuelves a tirar");
+                        //Caso de que el jugador 1 (0)::
                         i--;
                     }
-
-
+                    //Bloque puente
+                    if(esPuente(jugadores[i])){
+                        System.out.println("De puente a puente y tiro porque me lleva la corriente");
+                        if(jugadores[i] == 6){
+                            System.out.println("El Puente te lleva rio arriba, a la casilla 12");
+                            jugadores[i] = 12;
+                        }
+                        else if(jugadores[i] == 12){
+                            System.out.println("El puente te lleva rio abajo, hasta la casilla 6");
+                            jugadores[i] = 6;
+                        }
+                        //En caso de jugador 1 (i = 0) no puedo restarle 1
+                        i--;
+                    }
+                    if (esPozo(jugadores[i])){
+                        System.out.println("Caiste en un pozo, Te quedaras aqui, hasta que otro tenga tu mismo destino o hasta que seas el ultimo");
+                    }
                 }
                 System.out.println("\n");
             }
@@ -86,12 +104,29 @@ public class oca{
     }
     public static int posicionOcaAOca (int posicionActual, int[] casillasOca){
         int nuevaPosicion = 0;
-        for (int i = 0; i < casillasOca.length -1;i++){
+        for (int i = 0; i < casillasOca.length;i++){
             if (posicionActual == casillasOca[i]){
                 nuevaPosicion = casillasOca[i+1];
             }
         }
         return nuevaPosicion;
+    }
+    public static boolean esPuente (int posicion){
+        if (posicion == 6 || posicion == 12){
+            return true;
+        }
+        return false;
+    }
+    public static boolean esPozo (int posicion){
+        if (posicion == 31){
+            return true;
+        }
+        return false;
+
+    }
+    public static int esJugador1 (int  posicion){
+        int jugador1 = 0;
+        return jugador1;
     }
     //Aqui creamos los metodos. Seguramente aqui estaran las casillas especiales
 }
