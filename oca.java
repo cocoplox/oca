@@ -3,6 +3,9 @@ import java.util.Scanner;
 public class oca{
     public static boolean GAME = true;
     public static int CASILLA_FINAL = 63;
+    public static int [] CASILLAS_OCA = {1,5,9,14,18,23,27,32,36,41,45,50,54,59,63};
+    public static int [] CASILLAS_ESPECIALES = {1,5,9,14,18,23,27,32,36,41,45,50,54,59,63,6,12,31,26,53,42,52,58};
+    public static int [] CASILLAS_PUENTE = {6,12};
     public static void main(String[] args){
         Scanner input = new Scanner(System.in);
         //Aqui van a ir todas las variables
@@ -10,9 +13,6 @@ public class oca{
         boolean numeroValido = false;
         int numeroJugadores = 0; // Se le da valor mas tarde
         int dado;
-        int[] casillasEspeciales = {1,5,9,14,18,23,27,32,36,41,45,50,54,59,63,6,12,31,26,53,42,52,58};
-        int[] casillasOca = {1,5,9,14,18,23,27,32,36,41,45,50,54,59,63};
-        int[] casillasPuente = {6,12};
 
         System.out.println("Vamos a jugar al juego de la oca");
         System.out.println("Introduce el numero de jugadores (1-4)");
@@ -35,12 +35,12 @@ public class oca{
         }
         //Se crean los jugadores en base al numero introducido:
 
-        int[] jugadores = new int[numeroJugadores];
+        int[] jugadores = new int[numeroJugadores + 1];
         //El indice de esta array es el jugador, y el valor es su posicion en el tablero
 
         while (GAME){
-            for (int i = 0; i < jugadores.length; i++){
-                System.out.println("Es el turno del jugador: " + (i+1));
+            for (int i = 1; i < jugadores.length; i++){
+                System.out.println("Es el turno del jugador: " + (i));
                 System.out.println("Actualmente estas en la casilla: " + jugadores[i]);
                 System.out.println("Pulsa ENTER para tirar los dados");
                 input.nextLine();
@@ -48,15 +48,15 @@ public class oca{
                 dado = numeroRandom.nextInt(6)+1;
                 jugadores[i] += dado;
                 System.out.println("El dado ha caido en " + dado);
-                System.out.println("el jugador " + (i+1) + " se ha desplazado a la casilla: " + jugadores[i]);
+                System.out.println("el jugador " + (i) + " se ha desplazado a la casilla: " + jugadores[i]);
                 // Metodo casilla especial
-                if (esCasillaEspecial(jugadores[i], casillasEspeciales)){
+                if (esCasillaEspecial(jugadores[i])){
                     System.out.println("Estas en una casilla especial DEBUG");
 
                     //Bloque oca
-                    if(esOca(jugadores[i], casillasOca)){
+                    if(esOca(jugadores[i])){
                         System.out.println("De oca a oca y tiro porque me toca");
-                        int nuevaPosicion = posicionOcaAOca(jugadores[i], casillasOca);
+                        int nuevaPosicion = posicionOcaAOca(jugadores[i]);
                         jugadores[i] = nuevaPosicion;
                         System.out.println("Te has desplazado a la casilla: " + jugadores[i]);
                         System.out.println("Vuelves a tirar");
@@ -74,7 +74,6 @@ public class oca{
                             System.out.println("El puente te lleva rio abajo, hasta la casilla 6");
                             jugadores[i] = 6;
                         }
-                        //En caso de jugador 1 (i = 0) no puedo restarle 1
                         i--;
                     }
                     if (esPozo(jugadores[i])){
@@ -86,27 +85,27 @@ public class oca{
         }
         input.close();
     }
-    public static boolean esCasillaEspecial (int posicion, int[] casillasEspeciales){
-        for (int valor : casillasEspeciales){
+    public static boolean esCasillaEspecial (int posicion){
+        for (int valor : CASILLAS_ESPECIALES){
             if (valor == posicion){
                 return true;
             }
         }
         return false;
     }
-    public static boolean esOca (int posicion, int[] casillasOca){
-        for(int valores : casillasOca){
+    public static boolean esOca (int posicion){
+        for(int valores : CASILLAS_OCA){
             if (valores == posicion){
                 return true;
             }
         }
         return false;
     }
-    public static int posicionOcaAOca (int posicionActual, int[] casillasOca){
+    public static int posicionOcaAOca (int posicionActual){
         int nuevaPosicion = 0;
-        for (int i = 0; i < casillasOca.length;i++){
-            if (posicionActual == casillasOca[i]){
-                nuevaPosicion = casillasOca[i+1];
+        for (int i = 0; i < CASILLAS_OCA.length;i++){
+            if (posicionActual == CASILLAS_OCA[i]){
+                nuevaPosicion = CASILLAS_OCA[i+1];
             }
         }
         return nuevaPosicion;
